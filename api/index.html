@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <title>Movie Stan API</title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="../css/style.css" rel="stylesheet" media="screen">
+    <style>
+    	.panel-body{
+    		word-break: break-all;
+    	}
+    </style>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../../assets/js/html5shiv.js"></script>
+      <script src="../../assets/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+	<div class="container">
+		<h3>MovieStan API List</h3>
+		<!-- <h4>API 文件說明：<a href="https://docs.google.com/document/d/1R7NAG7P0hSpdnkf-ZJ0jtWxhPFCh9VoilWMYIzQiKC0/edit?usp=sharing">https://docs.google.com/document/d/1R7NAG7P0hSpdnkf-ZJ0jtWxhPFCh9VoilWMYIzQiKC0/edit?usp=sharing</a></h4> -->
+		<div class="panel panel-default">
+		  <div class="panel-heading">POST <a href="MemberRegister.php" target="_blank">MemberRegister.php</a></div>
+		  <div class="panel-body">
+		    Request the MemberRegister.php after doing the auth reuqests from Facebook API
+		    <hr>
+		    <b>Parameters</b>
+		    <li>FacebookId: Get the Facebook ID from Facebook Graph API</li>
+		    <li>Email: Get the Email address from Facebook Graph API</li>
+		    <li>Example: <a href="./MemberRegister.php?FacebookId=123&Email=test@gmail.com" target="_blank">MemberRegister.php?FacebookId=123&Email=test@gmail.com</a></li>
+		    <hr>
+		    <b>Return</b>
+		    <xmp>{
+"StatusCode": "200", // Status Code (200, 404)
+"MemberId": "123" // Member Id 
+}</xmp>
+		  </div>
+		</div>
+
+
+		<div class="panel panel-default">
+		  <div class="panel-heading">POST <a href="MemberLogin.php" target="_blank">MemberLogin.php</a></div>
+		  <div class="panel-body">
+		    Send Facebook ID and Email address to verify account information, and then return the member id
+		    <hr>
+		    <b>Parameters</b>
+		    <li>FacebookId: Get the Facebook ID from Facebook Graph API</li>
+		    <li>Email: Get the Email address from Facebook Graph API</li>
+		    <li>Example: <a href="./MemberLogin.php?FacebookId=123&Email=test@gmail.com&MemberId=1" target="_blank">./MemberLogin.php?FacebookId=123&Email=test@gmail.com&MemberId=1</a></li>
+		    <hr>
+		    <b>Return</b>
+		    <xmp>{
+"StatusCode": "200", // Status Code (200, 404)
+"MemberId": "123" // Member Id 
+"LoginToken": "RANDOMSTRING" // Member Id 
+}</xmp>
+		  </div>
+		</div>
+		
+		<div class="panel panel-default">
+		  <div class="panel-heading">POST <a href="BrowserAdd.php" target="_blank">BrowserAdd.php</a></div>
+		  <div class="panel-body">
+		    Simply add browse history, it is for the Machine Learning
+		    <hr>
+		    <b>Parameters</b>
+		    <li>MemberId: Get from MemberLogin.php API</li>
+		    <li>LoginToken: Get from MemberLogin.php API</li>
+		    <li>MovieId: Get from Movie List API</li>
+		    <li>Example: <a href="./BrowserAdd.php?LoginToken=123123123&MovieId=1&MemberId=1" target="_blank">./BrowserAdd.php?LoginToken=123123123&MovieId=1&MemberId=1</a></li>
+		    <hr>
+		    <b>Return</b>
+		    <xmp>{
+"StatusCode": "200", // Status Code (200, 404)
+}</xmp>
+		  </div>
+		</div>
+
+		<div class="panel panel-default">
+		  <div class="panel-heading">POST <a href="FavoriteAdd.php" target="_blank">FavoriteAdd.php</a></div>
+		  <div class="panel-body">
+		    Add favorite by movie id
+		    <hr>
+		    <b>Parameters</b>
+		    <li>MemberId: Get from MemberLogin.php API</li>
+		    <li>LoginToken: Get from MemberLogin.php API</li>
+		    <li>MovieId: Get from Movie List API</li>
+		    <li>Example: <a href="./FavoriteAdd.php?LoginToken=123123123&MovieId=1&MemberId=1" target="_blank">./FavoriteAdd.php?LoginToken=123123123&MovieId=1&MemberId=1</a></li>
+		    <hr>
+		    <b>Return</b>
+		    <xmp>{
+"StatusCode": "200", // Status Code (200, 404)
+}</xmp>
+		  </div>
+		</div>
+
+		<div class="panel panel-default">
+		  <div class="panel-heading">POST <a href="RatingAdd.php" target="_blank">FavoriteAdd.php</a></div>
+		  <div class="panel-body">
+		    Add movie rating
+		    <hr>
+		    <b>Parameters</b>
+		    <li>MemberId: Get from MemberLogin.php API</li>
+		    <li>LoginToken: Get from MemberLogin.php API</li>
+		    <li>MovieId: Get from Movie List API</li>
+		    <li>Score: The rating score (1-5)</li>
+		    <li>Example: <a href="./RatingAdd.php?LoginToken=123123123&MovieId=1&MemberId=1&Score=4" target="_blank">./RatingAdd.php?LoginToken=123123123&MovieId=1&MemberId=1&Score=4</a></li>
+		    <hr>
+		    <b>Return</b>
+		    <xmp>{
+"StatusCode": "200", // Status Code (200, 404)
+}</xmp>
+		  </div>
+		</div>
+
+		<div class="panel panel-default">
+		  <div class="panel-heading">POST <a href="FriendAdd.php" target="_blank">FriendAdd.php</a></div>
+		  <div class="panel-body">
+		    Send friend requests
+		    <hr>
+		    <b>Parameters</b>
+		    <li>MemberId: Get from MemberLogin.php API</li>
+		    <li>LoginToken: Get from MemberLogin.php API</li>
+		    <li>FriendMemberId: Friend's Member ID</li>
+		    <li>Example: <a href="./FriendAdd.php?LoginToken=123123123&FriendMemberId=1&MemberId=1" target="_blank">./FriendAdd.php?LoginToken=123123123&FriendMemberId=1&MemberId=1</a></li>
+		    <hr>
+		    <b>Return</b>
+		    <xmp>{
+"StatusCode": "200", // Status Code (200, 404)
+}</xmp>
+		  </div>
+		</div>
+
+		<div class="panel panel-default">
+		  <div class="panel-heading">POST <a href="FriendConfirm.php" target="_blank">FriendConfirm.php</a></div>
+		  <div class="panel-body">
+		    Reponse friend request
+		    <hr>
+		    <b>Parameters</b>
+		    <li>MemberId: Get from MemberLogin.php API</li>
+		    <li>LoginToken: Get from MemberLogin.php API</li>
+		    <li>FriendMemberId: Friend's Member ID</li>
+		    <li>Accept: Acceptance code - 1 accept, 0 decline</li>
+		    <li>Example: <a href="./FriendConfirm.php?LoginToken=123123123&FriendMemberId=1&MemberId=1&Accept=1" target="_blank">./FriendConfirm.php?LoginToken=123123123&FriendMemberId=1&MemberId=1&Accept=1</a></li>
+		    <hr>
+		    <b>Return</b>
+		    <xmp>{
+"StatusCode": "200", // Status Code (200, 404)
+}</xmp>
+		  </div>
+		</div>
+	</div>
+</body>
+</html>
