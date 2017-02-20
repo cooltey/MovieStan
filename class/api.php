@@ -118,7 +118,7 @@ class API{
 			$m_facebook_id		= $this->getLib->setFilter($getData['FacebookId']);
 			$m_email			= $this->getLib->setFilter($getData['Email']);
 			$m_register_time	= date("Y-m-d H:i:s");
-			$m_login_time		= "";
+			$m_login_time		= date("Y-m-d H:i:s");
 			$m_login_ip			= $this->getLib->getIp();
 			$m_login_token		= "";
 			$m_status			= "1";
