@@ -26,7 +26,7 @@
  // $db_password 	= "";
 
  $db_host 		= "us-cdbr-azure-west-b.cleardb.com";
- $db_name 		= "movie_stan";
+ $db_name 		= "moviestan";
  $db_username 	= "b3ca558c594578";
  $db_password 	= "1dada4fd";
 
