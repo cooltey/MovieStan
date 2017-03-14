@@ -18,7 +18,7 @@ class API{
 	}
 
 	function OutPutMessage($call_id){
-		$theOutArray =  array("200", "404");
+		$theOutArray =  array("200", "404", "500");
 
 		return $theOutArray[$call_id];
 	}
@@ -165,7 +165,10 @@ class API{
 					$returnArray['StatusCode']	    = $this->OutPutMessage(0);
 					$returnArray['MemberId']		= $getId;
 				}else{
-					$returnArray['StatusCode'] = $this->OutPutMessage(1);
+					$returnArray['StatusCode'] 		= $this->OutPutMessage(2);
+					$getData = $this->getLib->fetchSQL($sth);
+
+					$returnArray['MemberId']		= $getData['m_index'];
 				}
 
 				
