@@ -20,15 +20,15 @@
  session_start();
 
  // use PDO to make the connection
- // $db_host 		= "127.0.0.1";
- // $db_name 		= "movie_stan";
- // $db_username 	= "root";
- // $db_password 	= "";
+ $db_host 		= "127.0.0.1";
+ $db_name 		= "movie_stan";
+ $db_username 	= "root";
+ $db_password 	= "";
 
- $db_host 		= "us-cdbr-azure-west-b.cleardb.com";
- $db_name 		= "moviestan";
- $db_username 	= "b3ca558c594578";
- $db_password 	= "1dada4fd";
+ // $db_host 		= "us-cdbr-azure-west-b.cleardb.com";
+ // $db_name 		= "moviestan";
+ // $db_username 	= "b3ca558c594578";
+ // $db_password 	= "1dada4fd";
 
  try {
 	$db = new PDO("mysql:host=$db_host;dbname=$db_name", $db_username, $db_password);

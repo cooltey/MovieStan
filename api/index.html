@@ -29,8 +29,9 @@
 		    <hr>
 		    <b>Parameters</b>
 		    <li>FacebookId: Get the Facebook ID from Facebook Graph API</li>
+		    <li>Name: Get Name from Facebook</li>
 		    <li>Email: Get the Email address from Facebook Graph API</li>
-		    <li>Example: <a href="./MemberRegister.php?FacebookId=123&Email=test@gmail.com" target="_blank">MemberRegister.php?FacebookId=123&Email=test@gmail.com</a></li>
+		    <li>Example: <a href="./MemberRegister.php?FacebookId=123&Email=test@gmail.com&Name=Cooltey" target="_blank">MemberRegister.php?FacebookId=123&Email=test@gmail.com&Name=Cooltey</a></li>
 		    <hr>
 		    <b>Return</b>
 		    <xmp>{
@@ -97,7 +98,7 @@
 		</div>
 
 		<div class="panel panel-default">
-		  <div class="panel-heading">POST <a href="RatingAdd.php" target="_blank">FavoriteAdd.php</a></div>
+		  <div class="panel-heading">POST <a href="RatingAdd.php" target="_blank">RatingAdd.php</a></div>
 		  <div class="panel-body">
 		    Add movie rating
 		    <hr>
@@ -105,12 +106,33 @@
 		    <li>MemberId: Get from MemberLogin.php API</li>
 		    <li>LoginToken: Get from MemberLogin.php API</li>
 		    <li>MovieId: Get from Movie List API</li>
-		    <li>Score: The rating score (1-5)</li>
-		    <li>Example: <a href="./RatingAdd.php?LoginToken=123123123&MovieId=1&MemberId=1&Score=4" target="_blank">./RatingAdd.php?LoginToken=123123123&MovieId=1&MemberId=1&Score=4</a></li>
+		    <li>Score: The rating score (1-10)</li>
+		    <li>Comments: The Comments</li>
+		    <li>Example: <a href="./RatingAdd.php?LoginToken=123123123&MovieId=1&MemberId=1&Score=4&Comments=123" target="_blank">./RatingAdd.php?LoginToken=123123123&MovieId=1&MemberId=1&Score=4&Comments=123</a></li>
 		    <hr>
 		    <b>Return</b>
 		    <xmp>{
 "StatusCode": "200", // Status Code (200, 404)
+}</xmp>
+		  </div>
+		</div>
+
+
+		<div class="panel panel-default">
+		  <div class="panel-heading">POST <a href="RatingList.php" target="_blank">RatingList.php</a></div>
+		  <div class="panel-body">
+		    Add movie rating
+		    <hr>
+		    <b>Parameters</b>
+		    <li>MemberId: Get from MemberLogin.php API</li>
+		    <li>LoginToken: Get from MemberLogin.php API</li>
+		    <li>MovieId: Get from Movie List API</li>
+		    <li>Example: <a href="./RatingList.php?LoginToken=123123123&MovieId=1&MemberId=1" target="_blank">./RatingList.php?LoginToken=123123123&MovieId=1&MemberId=1</a></li>
+		    <hr>
+		    <b>Return</b>
+		    <xmp>{
+"StatusCode": "200", // Status Code (200, 404)
+"List": [], // Array data
 }</xmp>
 		  </div>
 		</div>

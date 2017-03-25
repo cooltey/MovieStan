@@ -8,7 +8,7 @@
 	 */
 	 
 	 /*
-	LoginToken=123123123&MovieId=1&MemberId=1&Score=4
+	LoginToken=123123123&MovieId=1&MemberId=1&Score=4&Comments=123
 	 */
 	 
 	 include_once("../config/database.php");

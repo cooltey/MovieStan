@@ -116,6 +116,7 @@ class API{
 			
 			$dataArray			= array();
 			$m_facebook_id		= $this->getLib->setFilter($getData['FacebookId']);
+			$m_name				= $this->getLib->setFilter($getData['Name']);
 			$m_email			= $this->getLib->setFilter($getData['Email']);
 			$m_register_time	= date("Y-m-d H:i:s");
 			$m_login_time		= date("Y-m-d H:i:s");
@@ -143,15 +144,17 @@ class API{
 				if($count == 0){
 					// insert 
 					$sql = "INSERT INTO `members`(`m_facebook_id`, 
+												 `m_name`,
 												 `m_email`, 
 												 `m_register_time`,
 												 `m_login_time`,
 												 `m_login_ip`,
 												 `m_login_token`,
 												 `m_status`) 
-							VALUES(?, ?, ?, ?, ?, ?, ?)";
+							VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 					$sth = $this->db->prepare($sql);
 					$sth->execute(array($m_facebook_id, 
+										$m_name,
 										$m_email, 
 										$m_register_time,
 										$m_login_time,
@@ -317,6 +320,7 @@ class API{
 			$m_login_token		= $this->getLib->setFilter($getData['LoginToken']);
 			$mov_index			= $this->getLib->setFilter($getData['MovieId']);
 			$rat_score			= intval($this->getLib->setFilter($getData['Score']));
+			$rat_comments		= $this->getLib->setFilter($getData['Comments']); // optional
 			$rat_create_time	= date("Y-m-d H:i:s");
 			$rat_status			= "1";
 			
@@ -326,17 +330,62 @@ class API{
 				$sql = "INSERT INTO `ratings`(`m_index`, 
 											 `mov_index`, 
 											 `rat_score`,
+											 `rat_comments`,
 											 `rat_create_time`,
 											 `rat_status`) 
-						VALUES(?, ?, ?, ?, ?)";
+						VALUES(?, ?, ?, ?, ?, ?)";
 				$sth = $this->db->prepare($sql);
 				$sth->execute(array($m_index, 
 									$mov_index, 
 									$rat_score,
+									$rat_comments,
 									$rat_create_time,
 									$rat_status));
 
 				$returnArray['StatusCode']	    = $this->OutPutMessage(0);
+
+				
+			}else{			
+				$returnArray['StatusCode'] = $this->OutPutMessage(1);
+			}
+		}
+		return $returnArray;
+	}	
+
+	// RatingList.php
+	function RatingList($getData){
+
+		$returnArray = array("StatusCode"	=> $this->OutPutMessage(1),
+							 "List"			=> array());
+
+		if($this->getLib->checkVal($getData['LoginToken']) && 
+			$this->getLib->checkVal($getData['MemberId']) && 
+			$this->getLib->checkVal($getData['MovieId'])){  
+			
+			$dataArray			= array();
+			$m_index			= $this->getLib->setFilter($getData['MemberId']);
+			$m_login_token		= $this->getLib->setFilter($getData['LoginToken']);
+			$mov_index			= $this->getLib->setFilter($getData['MovieId']);
+			$rat_status			= "1";
+			
+
+			if($this->AuthUser($m_index, $m_login_token)){
+				// insert 
+				$sql = "SELECT `b`.`m_name` AS `UserName`, `a`.`rat_score` AS `Score`,
+						`a`.`rat_comment` AS `Comments`
+						FROM `ratings` AS `a`, `members` AS `b`
+						WHERE `a`.`mov_index` = :mov_index 
+						AND `a`.`m_index` = `b`.`m_index`
+						AND `a`.`rat_status` = :status
+						ORDER BY `a`.`rat_create_time` DESC";
+
+				$sth = $this->db->prepare($sql);
+				$sth->bindValue(":mov_index", $mov_index);
+				$sth->bindValue(":status", $rat_status);
+				$sth->execute();	
+
+				$returnArray['StatusCode']	= $this->OutPutMessage(0);
+				$returnArray['List']	    = $this->getLib->fetchArray($sth);
 
 				
 			}else{			

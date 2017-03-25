@@ -8,7 +8,7 @@
 	 */
 	 
 	 /*
-	FacebookId=123123&Email=coolteygame@gmail.com&Name=Cooltey
+	LoginToken=123123123&MovieId=1&MemberId=1
 	 */
 	 
 	 include_once("../config/database.php");
@@ -35,7 +35,7 @@
 	 // return array
 	 $result_array = array();
 							
-	 $result_array = $getMain->MemberRegister($getData);
+	 $result_array = $getMain->RatingList($getData);
 	/*						
 	 if($result_array['status'] == 0){
 		 echo "<pre>";
