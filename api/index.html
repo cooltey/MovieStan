@@ -82,7 +82,7 @@
 		<div class="panel panel-default">
 		  <div class="panel-heading">POST <a href="FavoriteAdd.php" target="_blank">FavoriteAdd.php</a></div>
 		  <div class="panel-body">
-		    Add favorite by movie id
+		    Add / Delete favorite by movie id
 		    <hr>
 		    <b>Parameters</b>
 		    <li>MemberId: Get from MemberLogin.php API</li>
@@ -93,9 +93,52 @@
 		    <b>Return</b>
 		    <xmp>{
 "StatusCode": "200", // Status Code (200, 404)
+"Action": "INSERT", // insert or delete
 }</xmp>
 		  </div>
 		</div>
+
+		<div class="panel panel-default">
+		  <div class="panel-heading">POST <a href="FavoriteCheck.php" target="_blank">FavoriteCheck.php</a></div>
+		  <div class="panel-body">
+		    Check the favorite status by user id
+		    <hr>
+		    <b>Parameters</b>
+		    <li>MemberId: Get from MemberLogin.php API</li>
+		    <li>LoginToken: Get from MemberLogin.php API</li>
+		    <li>MovieId: Get from Movie List API</li>
+		    <li>Example: <a href="./FavoriteCheck.php?LoginToken=123123123&MovieId=1&MemberId=1" target="_blank">./FavoriteCheck.php?LoginToken=123123123&MovieId=1&MemberId=1</a></li>
+		    <hr>
+		    <b>Return</b>
+		    <xmp>{
+"StatusCode": "200", // Status Code (200, 404)
+"FavoriteId": 1, // favorite id
+}</xmp>
+		  </div>
+		</div>
+
+
+		<div class="panel panel-default">
+		  <div class="panel-heading">POST <a href="FavoriteList.php" target="_blank">FavoriteList.php</a></div>
+		  <div class="panel-body">
+		    Add movie rating
+		    <hr>
+		    <b>Parameters</b>
+		    <li>MemberId: Get from MemberLogin.php API</li>
+		    <li>LoginToken: Get from MemberLogin.php API</li>
+		    <li>FetchMemberId: Get from MemberLogin.php API</li>
+		    <li>Example: <a href="./FavoriteList.php?LoginToken=123123123&MemberId=1&FetchMemberId=1" target="_blank">./FavoriteList.php?LoginToken=123123123&MemberId=1&FetchMemberId=1</a></li>
+		    <hr>
+		    <b>Return</b>
+		    <xmp>{
+"StatusCode": "200", // Status Code (200, 404)
+"Member": [], // Array data
+"List": [], // Array data
+}</xmp>
+		  </div>
+		</div>
+
+
 
 		<div class="panel panel-default">
 		  <div class="panel-heading">POST <a href="RatingAdd.php" target="_blank">RatingAdd.php</a></div>

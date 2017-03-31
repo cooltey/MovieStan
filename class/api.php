@@ -265,10 +265,11 @@ class API{
 		return $returnArray;
 	}	
 
-	// FavoriteAdd.php
-	function FavoriteAdd($getData){
+	// FavoriteCheck.php // check favorite
+	function FavoriteCheck($getData){
 
-		$returnArray = array("StatusCode"	=> $this->OutPutMessage(1));
+		$returnArray = array("StatusCode"	=> $this->OutPutMessage(1),
+							 "FavoriteId"	=> "");
 
 		if($this->getLib->checkVal($getData['LoginToken']) && 
 			$this->getLib->checkVal($getData['MemberId']) && 
@@ -283,19 +284,215 @@ class API{
 			
 
 			if($this->AuthUser($m_index, $m_login_token)){
-				// insert 
-				$sql = "INSERT INTO `favorites`(`m_index`, 
-											 `mov_index`, 
-											 `fav_create_time`,
-											 `fav_status`) 
-						VALUES(?, ?, ?, ?)";
-				$sth = $this->db->prepare($sql);
-				$sth->execute(array($m_index, 
-									$mov_index, 
-									$fav_create_time,
-									$fav_status));
+
+				// check exist
+				$status = "1";
+				$sql 	= "SELECT `fav_index`
+							FROM `favorites` 
+							WHERE `fav_status` = :status
+							AND `mov_index` = :mov_index
+							AND `m_index` = :m_index";
+				$sth 	= $this->db->prepare($sql);
+				$sth->bindValue(":mov_index", $mov_index);
+				$sth->bindValue(":m_index", $m_index);
+				$sth->bindValue(":status", $status);
+				$sth->execute();	
+
+				$getFavData = $this->getLib->fetchSQL($sth);
 
 				$returnArray['StatusCode']	    = $this->OutPutMessage(0);
+				$returnArray['FavoriteId']	    = intval($getFavData['fav_index']);
+
+				
+
+
+				
+			}else{			
+				$returnArray['StatusCode'] = $this->OutPutMessage(1);
+			}
+		}
+		return $returnArray;
+	}	
+
+	// FavoriteAdd.php // add or delete
+	function FavoriteAdd($getData){
+
+		$returnArray = array("StatusCode"	=> $this->OutPutMessage(1),
+							 "Action"		=> "");
+
+		if($this->getLib->checkVal($getData['LoginToken']) && 
+			$this->getLib->checkVal($getData['MemberId']) && 
+			$this->getLib->checkVal($getData['MovieId'])){  
+			
+			$dataArray			= array();
+			$m_index			= $this->getLib->setFilter($getData['MemberId']);
+			$m_login_token		= $this->getLib->setFilter($getData['LoginToken']);
+			$mov_index			= $this->getLib->setFilter($getData['MovieId']);
+			$fav_create_time	= date("Y-m-d H:i:s");
+			$fav_status			= "1";
+			
+
+			if($this->AuthUser($m_index, $m_login_token)){
+
+				// check exist
+				$status = "1";
+				$sql 	= "SELECT `fav_index`
+							FROM `favorites` 
+							WHERE `fav_status` = :status
+							AND `mov_index` = :mov_index
+							AND `m_index` = :m_index";
+				$sth 	= $this->db->prepare($sql);
+				$sth->bindValue(":mov_index", $mov_index);
+				$sth->bindValue(":m_index", $m_index);
+				$sth->bindValue(":status", $status);
+				$sth->execute();	
+
+				$getFavData = $this->getLib->fetchSQL($sth);
+
+				if($getFavData['fav_index'] == ""){
+					// insert 
+					$sql = "INSERT INTO `favorites`(`m_index`, 
+												 `mov_index`, 
+												 `fav_create_time`,
+												 `fav_status`) 
+							VALUES(?, ?, ?, ?)";
+
+					$sth = $this->db->prepare($sql);
+					$sth->execute(array($m_index, 
+										$mov_index, 
+										$fav_create_time,
+										$fav_status));
+
+
+					$returnArray['StatusCode']	    = $this->OutPutMessage(0);
+					$returnArray['Action']	    	= "INSERT";
+				}else{
+					// delete
+					$sql = "DELETE FROM `favorites` 
+							WHERE `m_index` = :m_index
+							AND `mov_index` = :mov_index";
+					$sth = $this->db->prepare($sql);
+					$sth->bindValue(":m_index", $m_index);
+					$sth->bindValue(":mov_index", $mov_index);
+					$sth->execute();	
+					$returnArray['StatusCode']	    = $this->OutPutMessage(0);
+					$returnArray['Action']	    	= "DELETE";
+				}
+
+				
+
+
+				
+			}else{			
+				$returnArray['StatusCode'] = $this->OutPutMessage(1);
+			}
+		}
+		return $returnArray;
+	}	
+
+	// FavoriteList.php // later
+	function FavoriteList($getData){
+
+		$returnArray = array("StatusCode"	=> $this->OutPutMessage(1),
+							 "Member"		=> array(),
+							 "List"			=> array());
+
+		if($this->getLib->checkVal($getData['LoginToken']) && 
+			$this->getLib->checkVal($getData['MemberId']) && 
+			$this->getLib->checkVal($getData['FetchMemberId'])){  
+			
+			$dataArray			= array();
+			$m_index			= $this->getLib->setFilter($getData['MemberId']);
+			$m_login_token		= $this->getLib->setFilter($getData['LoginToken']);
+			$fetch_m_index		= $this->getLib->setFilter($getData['FetchMemberId']);
+			$fav_status			= "1";
+			
+
+			if($this->AuthUser($m_index, $m_login_token)){
+				// get member info
+				// select  
+				$sql = "SELECT `m_index` AS `UserId`, `m_facebook_id` AS `UserFB`, `m_name` AS `UserName`
+						FROM `members`
+						WHERE `m_index` = :m_index
+						AND `m_status` = :status";
+
+				$sth = $this->db->prepare($sql);
+				$sth->bindValue(":m_index", $fetch_m_index);
+				$sth->bindValue(":status", $fav_status);
+				$sth->execute();
+
+				$getMemberData = $this->getLib->fetchSQL($sth);
+
+
+				// select  
+				$sql = "SELECT `mov_index`
+						FROM `favorites`
+						WHERE `m_index` = :m_index
+						AND `fav_status` = :status
+						ORDER BY `fav_create_time` DESC";
+
+				$sth = $this->db->prepare($sql);
+				$sth->bindValue(":m_index", $fetch_m_index);
+				$sth->bindValue(":status", $fav_status);
+				$sth->execute();
+
+
+				// fetch the movie db api
+				$apiUrl 		= "https://api.themoviedb.org/3/movie/";
+				$apiKey 		= "3eb234903c8417da0d448fde2f9cc02e";
+
+				$outputArray = array();
+
+				foreach($this->getLib->fetchArray($sth) AS $getFavData){
+
+					$getJSON 	= @file_get_contents($apiUrl.$getFavData['mov_index']."?api_key=".$apiKey);
+
+					if($getJSON != ""){
+						$getJsonData = json_decode($getJSON, true);
+
+						$newArray = array();
+
+						//    poster_path: "/45Y1G5FEgttPAwjTYic6czC9xCn.jpg",
+						//    adult: false,
+						//    overview: "In the near future, a weary Logan cares for an ailing Professor X in a hide out on the Mexican border. But Logan's attempts to hide from the world and his legacy are up-ended when a young mutant arrives, being pursued by dark forces.",
+						//    release_date: "2017-02-28",
+						//    genre_ids: [
+						//            28,
+						//            18,
+						//            878
+						//            ],
+						//    id: 263115,
+						//    original_title: "Logan",
+						//    original_language: "en",
+						//    title: "Logan",
+						//    backdrop_path: "/5pAGnkFYSsFJ99ZxDIYnhQbQFXs.jpg",
+						//    popularity: 172.393189,
+						//    vote_count: 1234,
+						//    video: false,
+						//    vote_average: 7.7
+						$newArray['poster_path'] 		= $getJsonData['poster_path'];
+						$newArray['adult'] 				= $getJsonData['adult'];
+						$newArray['overview'] 			= $getJsonData['overview'];
+						$newArray['release_date'] 		= $getJsonData['release_date'];
+						$newArray['genre_ids'] 			= array();
+						$newArray['id'] 				= $getJsonData['id'];
+						$newArray['original_title'] 	= $getJsonData['original_title'];
+						$newArray['original_language'] 	= $getJsonData['original_language'];
+						$newArray['title'] 				= $getJsonData['title'];
+						$newArray['backdrop_path'] 		= $getJsonData['backdrop_path'];
+						$newArray['popularity'] 		= $getJsonData['popularity'];
+						$newArray['vote_count'] 		= $getJsonData['vote_count'];
+						$newArray['video'] 				= $getJsonData['video'];
+						$newArray['vote_average'] 		= $getJsonData['vote_average'];
+
+						array_push($outputArray, $newArray);
+					}
+				}
+
+
+				$returnArray['StatusCode']	= $this->OutPutMessage(0);
+				$returnArray['Member']	    = $getMemberData;
+				$returnArray['List']	    = $outputArray;
 
 				
 			}else{			
@@ -371,8 +568,8 @@ class API{
 
 			if($this->AuthUser($m_index, $m_login_token)){
 				// insert 
-				$sql = "SELECT `b`.`m_name` AS `UserName`, `a`.`rat_score` AS `Score`,
-						`a`.`rat_comment` AS `Comments`
+				$sql = "SELECT `b`.`m_index` AS `UserId`, `b`.`m_facebook_id` AS `UserFB`, `b`.`m_name` AS `UserName`, `a`.`rat_score` AS `Score`,
+						`a`.`rat_comments` AS `Comments`, `a`.`rat_create_time` AS `Date`
 						FROM `ratings` AS `a`, `members` AS `b`
 						WHERE `a`.`mov_index` = :mov_index 
 						AND `a`.`m_index` = `b`.`m_index`
